@@ -19,14 +19,21 @@ class Jira(object):
 		issue = self.jra.issue(issue_key)
 		return issue
 
+	def get_issue_for_user(self, user, project, resolved):
+		user = self.user if user is None else user 
+		jql = "assignee = %s" % user
+		jql = jql + " and project = %s"%project if project else jql
+		jql = jql + " and resolution = Unresolved" if resolved else jql
+		return self.jra.search_issues(jql)
+
 class IssueMapper(object):
 	def __init__(self, issue):
 		self.issue = issue
 
 	def get_short_rep(self):
 
-		return "[%s] - [%s]" % (self.issue.fields.issuetype, self.issue.fields.summary)
+		return "[%s] - %s" % (self.issue.fields.issuetype, self.issue.fields.summary)
 
 	def get_long_rep(self):
 
-		return "[%s] - [%s]\n[Description]\n%s" % (self.issue.fields.issuetype, self.issue.fields.summary.strip(), self.issue.fields.description.strip())
+		return "[Type] - %s\n[Title] - %s\n[Assignee] - %s\t[Reporter] - %s\n[Description]\n%s" % (self.issue.fields.issuetype, self.issue.fields.summary.strip(), self.issue.fields.assignee, self.issue.fields.reporter, self.issue.fields.description.strip())
