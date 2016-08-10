@@ -1,6 +1,6 @@
 import click
 from utils import ConfigManager
-from jira_service import Jira
+from jira_service import Jira, IssueMapper
 
 
 @click.group()
@@ -19,10 +19,14 @@ def configure(host, user, password):
 
 @cli.command()
 @click.argument("issue_key")
-def issue(issue_key):
+@click.option("--full", "-f", is_flag=True)
+def issue(issue_key, full):
 	"""Gets issue by issue key"""
 	jra = Jira.get_jira_service();	# Check for exception and ask user to configure
-	print jra.get_issue(issue_key)
+	mapper = IssueMapper(jra.get_issue(issue_key))
+	
+	rep = mapper.get_long_rep() if full else mapper.get_short_rep()
+	print rep
 
 
 @cli.command("ls")

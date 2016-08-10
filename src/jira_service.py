@@ -17,4 +17,16 @@ class Jira(object):
 
 	def get_issue(self, issue_key):
 		issue = self.jra.issue(issue_key)
-		return issue.fields.summary
+		return issue
+
+class IssueMapper(object):
+	def __init__(self, issue):
+		self.issue = issue
+
+	def get_short_rep(self):
+
+		return "[%s] - [%s]" % (self.issue.fields.issuetype, self.issue.fields.summary)
+
+	def get_long_rep(self):
+
+		return "[%s] - [%s]\n[Description]\n%s" % (self.issue.fields.issuetype, self.issue.fields.summary.strip(), self.issue.fields.description.strip())
