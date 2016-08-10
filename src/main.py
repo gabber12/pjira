@@ -29,17 +29,31 @@ def issue(issue_key, full):
 
 
 @cli.command("ls")
-@click.option("--project", "-p")
-@click.option("--assignee", "-a")
-@click.option("--unresolved", "-r", is_flag=True)
-def list(project, assignee, unresolved):
-	"""Lists Issues according to passed options"""
+@click.option("--project", "-p", help="Project name")
+@click.option("--assignee", "-s", help ="Filter by assignee")
+@click.option("--all", "-a", is_flag=True, help="Get all issues")
+def list(project, assignee, all):
+	"""Lists Unresolved Issues"""
 	jra = Jira.get_jira_service();	# Check for exception and ask user to configure
-	issues = jra.get_issue_for_user(assignee, project, unresolved) # shift list representation logic to IssueMapper
+	issues = jra.get_issue_for_user(assignee, project, all) # shift list representation logic to IssueMapper
 	issue_reps = map(lambda x:IssueMapper(x).get_short_rep(), issues)
 	map(printf, issue_reps)
 
+
+@cli.command("create")
+@click.argument("project")
+@click.option("--summary", "-s", help="Summary")
+@click.option("--desc", "-d" , help="Description", default = "")
+@click.option("--type", "-t", help="Issue Type - Bug, Story ..\nDefault = Story", default = "Story")
+def create(project, summary, description, type):
+	"""Creates issue under a project"""
+	jra = Jira.get_jira_service();	# Check for exception and ask user to configure
+	issue = jra.create_issue(project, summary, description, type)
+	print IssueMapper(issue).get_long_rep()
+
+
 def printf(str):
 	print str
+
 if __name__ == '__main__':
     cli()

@@ -19,11 +19,21 @@ class Jira(object):
 		issue = self.jra.issue(issue_key)
 		return issue
 
-	def get_issue_for_user(self, user, project, resolved):
+	def create_issue(self, project, title, desc, type ):
+
+		issue_detail = {
+			'project': {'key':project},
+			'summary': title,
+			'description': desc,
+			'issuetype':{'name':type}
+		}
+		return self.jra.create_issue(fields = issue_detail)
+	def get_issue_for_user(self, user, project, all):
 		user = self.user if user is None else user 
 		jql = "assignee = %s" % user
 		jql = jql + " and project = %s"%project if project else jql
-		jql = jql + " and resolution = Unresolved" if resolved else jql
+		jql = jql + " and resolution = Unresolved" if not all else jql
+		print jql
 		return self.jra.search_issues(jql)
 
 class IssueMapper(object):
@@ -35,5 +45,6 @@ class IssueMapper(object):
 		return "[%s] - %s" % (self.issue.fields.issuetype, self.issue.fields.summary)
 
 	def get_long_rep(self):
-
-		return "[Type] - %s\n[Title] - %s\n[Assignee] - %s\t[Reporter] - %s\n[Description]\n%s" % (self.issue.fields.issuetype, self.issue.fields.summary.strip(), self.issue.fields.assignee, self.issue.fields.reporter, self.issue.fields.description.strip())
+		desc = self.issue.fields.description
+		desc = desc.strip() if desc is not None else ""
+		return "[Type] - %s\n[Title] - %s\n[Assignee] - %s\t[Reporter] - %s\n[Description]\n%s" % (self.issue.fields.issuetype, self.issue.fields.summary.strip(), self.issue.fields.assignee, self.issue.fields.reporter, desc)
