@@ -1,7 +1,7 @@
 # python-jira
 A simple Atlassian jira cli client written in python
 
-***
+
 ## QuickStart
 Intial configuration include providing Jira details.
 
@@ -11,7 +11,7 @@ HOST: jira.xyz.com
 USER: gabber12
 PASSWORD: ********
 ```
-***
+
 ## Usage
 
 ```sh
