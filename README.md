@@ -29,4 +29,8 @@ $ jira issue JIRA-100 -f # View Full Issue details
 $ jira create JIRA -s Suitable summary text\ 
 				   -d Suitable description text\
 				   -t issue type (defaults to Story)
+
+# Comment on an issue
+$ jira comment JIRA-100 -c 'Added jira comment'
+
 ```
