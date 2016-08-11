@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
-  name = 'jira',
-  packages = ['jira'], # this must be the same as the name above
+  name = 'pj',
+  packages = ['pj'], # this must be the same as the name above
   version = '0.1',
   description = 'A simple Atlassian jira cli client written in python',
   author = 'Shubham Sharma',
@@ -10,4 +10,5 @@ setup(
   download_url = 'https://github.com/gabber12/python-jira/archive/0.1.tar.gz', # I'll explain this in a second
   keywords = ['client', 'cli', 'jira'], # arbitrary keywords
   classifiers = [],
+  install_requires=['jira'],
 )
