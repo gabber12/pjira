@@ -1,5 +1,5 @@
 import click
-from utils import ConfigManager
+from utils import ConfigManager, InvalidConfiguration
 from jira_service import Jira, IssueMapper
 
 
@@ -27,7 +27,6 @@ def issue(issue_key, full):
 	rep = mapper.get_long_rep() if full else mapper.get_short_rep()
 	print rep
 
-
 @cli.command("ls")
 @click.option("--project", "-p", help="Project name")
 @click.option("--assignee", "-s", help ="Filter by assignee")
@@ -38,7 +37,6 @@ def list(project, assignee, all):
 	issues = jra.get_issue_for_user(assignee, project, all) # shift list representation logic to IssueMapper
 	issue_reps = map(lambda x:IssueMapper(x).get_short_rep(), issues)
 	map(printf, issue_reps)
-
 
 @cli.command("create")
 @click.argument("project")
@@ -51,9 +49,21 @@ def create(project, summary, description, type):
 	issue = jra.create_issue(project, summary, description, type)
 	print IssueMapper(issue).get_long_rep()
 
+@cli.command("comment")
+@click.argument("issue_key")
+@click.option("--comment", "-c", help="Comment text", prompt=True)
+def create(issue_key, comment):
+	"""Creates issue under a project"""
+	jra = Jira.get_jira_service();	# Check for exception and ask user to configure
+	print jra.add_comment(issue_key, comment)
+
+
 
 def printf(str):
 	print str
 
 if __name__ == '__main__':
-    cli()
+	try:
+		cli()
+	except InvalidConfiguration, e:
+		print str(e)

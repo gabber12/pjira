@@ -20,7 +20,6 @@ class Jira(object):
 		return issue
 
 	def create_issue(self, project, title, desc, type ):
-
 		issue_detail = {
 			'project': {'key':project},
 			'summary': title,
@@ -28,6 +27,7 @@ class Jira(object):
 			'issuetype':{'name':type}
 		}
 		return self.jra.create_issue(fields = issue_detail)
+
 	def get_issue_for_user(self, user, project, all):
 		user = self.user if user is None else user 
 		jql = "assignee = %s" % user
@@ -35,6 +35,9 @@ class Jira(object):
 		jql = jql + " and resolution = Unresolved" if not all else jql
 		print jql
 		return self.jra.search_issues(jql)
+
+	def add_comment(self, issue_key, comment):
+		comment = self.jra.add_comment(issue_key, comment);
 
 class IssueMapper(object):
 	def __init__(self, issue):

@@ -24,11 +24,29 @@ class ConfigManager(object):
 		details = {'user': user, 'host':host, 'password':password}
 		save_json_to_file(details, config_file)
 
+	@classmethod
+	def _check_config(cls, json_obj):
+		for key in ['user', 'host', 'password']:
+			if key not in json_obj:
+				return False
+		return True
+
 	@classmethod	
 	def get_details(cls):
 		config_file = cls.get_config_file_name();
-		return get_json_from_file(config_file)
+		try:
+			json_obj = get_json_from_file(config_file)
+			if _check_config(json_obj):	
+				raise InvalidConfiguration("Invalid configuration")
+		except IOError:
+			raise InvalidConfiguration("Configuration file doesnt exists")
+		return json_obj
 
+class InvalidConfiguration(Exception):
+	def __init__(self, value):
+		self.value = value
+	def __str__(self):
+		return repr(self.value)
 
 
 def save_json_to_file(json_obj, file):
