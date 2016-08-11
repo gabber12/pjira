@@ -36,10 +36,12 @@ class ConfigManager(object):
 		config_file = cls.get_config_file_name();
 		try:
 			json_obj = get_json_from_file(config_file)
-			if _check_config(json_obj):	
+			if not cls._check_config(json_obj):	
 				raise InvalidConfiguration("Invalid configuration")
 		except IOError:
 			raise InvalidConfiguration("Configuration file doesnt exists")
+		except ValueError:
+			raise InvalidConfiguration("Invalid configuration")
 		return json_obj
 
 class InvalidConfiguration(Exception):

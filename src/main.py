@@ -66,4 +66,6 @@ if __name__ == '__main__':
 	try:
 		cli()
 	except InvalidConfiguration, e:
-		print str(e)
+		print "Error: " + str(e)
+		print "To reconfigure client run - \n'jira configure'"
+		print cli.get_help(click.Context(cli))
