@@ -7,7 +7,7 @@ setup(
   author = 'Shubham Sharma',
   author_email = 'shubham.sha12@gmail.com',
   url = 'https://github.com/gabber12/python-jira', # use the URL to the github repo
-  download_url = 'https://github.com/gabber12/python-jira/archive/0.1.tar.gz', # I'll explain this in a second
+  download_url = 'https://github.com/gabber12/python-jira/archive/0.3.tar.gz', # I'll explain this in a second
   keywords = ['client', 'cli', 'jira'], # arbitrary keywords
   classifiers = [],
   install_requires=['jira'],
