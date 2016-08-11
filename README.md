@@ -26,11 +26,11 @@ $ jira issue JIRA-100 # View Issue details
 $ jira issue JIRA-100 -f # View Full Issue details
 
 # Create a new Jira issue
-$ jira create JIRA -s Suitable summary text\ 
-				   -d Suitable description text\
-				   -t issue type (defaults to Story)
+$ jira create JIRA -s "Suitable summary text"\ 
+				   -d "Suitable description text"\
+				   -t "Bug"[Default - Story]
 
 # Comment on an issue
-$ jira comment JIRA-100 -c 'Added jira comment'
+$ jira comment JIRA-100 'Added jira comment'
 
 ```
