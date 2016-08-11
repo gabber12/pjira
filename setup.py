@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
-  name = 'pj',
-  packages = ['pj'], # this must be the same as the name above
+  name = 'pjira',
+  packages = ['pjira'], # this must be the same as the name above
   version = '0.1',
   description = 'A simple Atlassian jira cli client written in python',
   author = 'Shubham Sharma',
