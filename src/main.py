@@ -51,7 +51,7 @@ def create(project, summary, description, type):
 
 @cli.command("comment")
 @click.argument("issue_key")
-@click.option("--comment", "-c", help="Comment text", prompt=True)
+@click.argument("comment")
 def create(issue_key, comment):
 	"""Creates issue under a project"""
 	jra = Jira.get_jira_service();	# Check for exception and ask user to configure
