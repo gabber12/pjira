@@ -1,6 +1,9 @@
 from os.path import expanduser
 import os
 import json
+import editor
+import re
+
 class ConfigManager(object):
 	"Manages Client connection details"
 	def __init__(self):
@@ -44,11 +47,57 @@ class ConfigManager(object):
 			raise InvalidConfiguration("Invalid configuration")
 		return json_obj
 
+issue_template = """##Summary##
+ Write Summary Here
+##End##
+##Description##
+ Write Description Here
+##End##
+"""
+issue_regex = r'##Summary##(?P<summary>(.|\n)*)\n##End##\n##Description##(?P<desc>(.|\n)*)\n##End##'
+comment_template = """
+****** Comment ******
+ Write Comment Here
+****** End ******
+"""
+class EditorMode(object):
+	def __init__(self, type):
+		self.type = type
+
+	def open(self):
+		template = issue_template if self.type == 'issue' else comment_template
+		self.value = editor.edit(contents=template)
+
+	def _parse_issue_template(self):
+		text = self.value
+		reg_search = re.search(issue_regex, text)
+		data = reg_search.groupdict()
+		summary = data['summary'];
+		description = data['desc'];
+		return {'summary':summary, 'description':description}
+
+	def parse(self):
+		return self._parse_issue_template() if self.type == 'issue' else self._parse_comment_template()
+
+	def get(self):
+		return self.parse(self.value)
+
+
 class InvalidConfiguration(Exception):
 	def __init__(self, value):
 		self.value = value
 	def __str__(self):
 		return repr(self.value)
+
+def ask_for_confirmation(text):
+	while True:
+		res = str(input(text))
+		if res.lower() not in ['y', 'n']:
+			print 'Please try with a valid response'
+			continue
+		else:
+			return res.lower() == 'y'
+
 
 
 def save_json_to_file(json_obj, file):
