@@ -3,6 +3,7 @@ A simple Atlassian jira cli client written in python
 
 ## Build
 Source is setuptools friendly, all you need is pip.
+
 ```sh
 $ git clone https://github.com/gabber12/python-jira.git
 $ cd python-jira
