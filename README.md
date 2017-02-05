@@ -33,4 +33,14 @@ $ jira create JIRA -s "Suitable summary text"\
 # Comment on an issue
 $ jira comment JIRA-100 'Added jira comment'
 
+# Transition issues to possible states.
+$ jira move JIRA-100
+101 On Hold
+90 Start Development
+Please enter the id of transition: 90
+$ jira move JIRA-100
+91 Send for code review
+101 On Hold 
+Please enter the id of transition: 101
+
 ```

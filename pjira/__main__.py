@@ -1,5 +1,5 @@
 import click
-from utils import ConfigManager, InvalidConfiguration, EditorMode, ask_for_confirmation
+from utils import ConfigManager, InvalidConfiguration, EditorMode, ask_for_confirmation, prompt
 from jira_service import Jira, IssueMapper
 import editor
 
@@ -27,6 +27,17 @@ def issue(issue_key, full):
 	rep = mapper.get_long_rep() if full else mapper.get_short_rep()
 	print rep
 
+@cli.command()
+@click.argument("issue_key")
+def move(issue_key):
+	"""Gets issue by issue key"""
+	jra = Jira.get_jira_service();	# Check for exception and ask user to configure
+	issue = jra.get_issue(issue_key)
+	possible_transitions = jra.get_transitions(issue)
+	print map(lambda x: printf(x['id']+" "+x['name']), possible_transitions)
+	res = prompt("Please enter the id of transition: ", map(lambda x: x['id'], possible_transitions))
+	print jra.transition_issue(issue, res)
+
 @cli.command("ls")
 @click.option("--project", "-p", help="Project name")
 @click.option("--assignee", "-s", help ="Filter by assignee")
@@ -36,6 +47,8 @@ def list(project, assignee, all):
 	jra = Jira.get_jira_service();
 	issues = jra.get_issue_for_user(assignee, project, all) # shift list representation logic to IssueMapper
 	issue_reps = map(lambda x:IssueMapper(x).get_short_rep(), issues)
+	if len(issue_reps) == 0:
+		print "No issue found for you"
 	map(printf, issue_reps)
 
 @cli.command("create")
@@ -51,12 +64,12 @@ def create(project, type,summary, desc, edit_mode):
 		interface.open()
 		data = interface.parse()
 		summary = data['summary']	
-		description = data['description']
+		desc = data['description']
 		if not ask_for_confirmation('Are you sure you want to create issue(Y/N): '):
 			print 'Operation Aborted'
 			return None
 	jra = Jira.get_jira_service();	
-	issue = jra.create_issue(project, summary, description, type)
+	issue = jra.create_issue(project, summary, desc, type)
 	print IssueMapper(issue).get_long_rep()
 
 @cli.command("comment")

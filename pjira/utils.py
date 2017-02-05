@@ -90,14 +90,17 @@ class InvalidConfiguration(Exception):
 		return repr(self.value)
 
 def ask_for_confirmation(text):
+	res = prompt(text, ['y', 'n'])
+	return res == 'y'
+
+def prompt(text, input_values):
 	while True:
 		res = str(input(text))
-		if res.lower() not in ['y', 'n']:
+		if res.lower() not in input_values:
 			print 'Please try with a valid response'
 			continue
 		else:
-			return res.lower() == 'y'
-
+			return res
 
 
 def save_json_to_file(json_obj, file):
