@@ -88,6 +88,5 @@ def comment(issue_key, comment):
 	jra = Jira.get_jira_service();
 	click.echo(jra.add_comment(issue_key, comment))
 
-
 def printf(str):
 	click.echo(str)
