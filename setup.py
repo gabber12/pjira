@@ -10,5 +10,11 @@ setup(
   download_url = 'https://github.com/gabber12/python-jira/archive/0.3.tar.gz', # I'll explain this in a second
   keywords = ['client', 'cli', 'jira'], # arbitrary keywords
   classifiers = [],
-  install_requires=['jira'],
+  install_requires=[
+        'Click','jira'
+  ],
+  entry_points='''
+        [console_scripts]
+        pjira=main:cli
+    '''
 )
