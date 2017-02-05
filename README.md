@@ -2,10 +2,12 @@
 A simple Atlassian jira cli client written in python
 
 ## Build
-This is a little convoluted. The only option to install is installing by source.
+Source is setuptools friendly, all you need is pip.
 ```sh
-$ pip install -r requirements.txt
-$ python pjira # run directly through python
+$ git clone https://github.com/gabber12/python-jira.git
+$ cd python-jira
+$ pip install --editable
+$ pjira --help
 ```
 
 ## QuickStart
